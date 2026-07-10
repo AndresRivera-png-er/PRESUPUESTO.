@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Presupuestos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen font-sans">
+
+    <nav class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wide">FacturaApp 💼</h1>
+            <div class="space-x-2">
+                <button onclick="switchTab('presupuesto')" class="px-4 py-2 rounded font-medium hover:bg-blue-700 transition">Presupuesto</button>
+                <button onclick="switchTab('configuracion')" class="px-4 py-2 rounded font-medium hover:bg-blue-700 transition">Configuración Empresa</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        
+        <section id="tab-configuracion" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold border-b pb-2 mb-4 text-blue-600">Configuración de la Empresa</h2>
+                <form id="form-empresa" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">NIT / Identificación:</label>
+                        <input type="text" id="emp-nit" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Nombre Completo / Razón Social:</label>
+                        <input type="text" id="emp-nombre" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Dirección:</label>
+                        <input type="text" id="emp-direccion" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Código Postal:</label>
+                        <input type="text" id="emp-cp" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Ciudad:</label>
+                        <input type="text" id="emp-ciudad" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Teléfono:</label>
+                        <input type="text" id="emp-telefono" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold mb-1">Email:</label>
+                        <input type="email" id="emp-email" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                    </div>
+                    
+                    <div class="md:col-span-2 mt-4">
+                        <h3 class="text-lg font-bold text-gray-700 mb-2 border-t pt-4">Términos y Condiciones (Notas)</h3>
+                        <label class="block text-sm font-semibold mb-1">Tiempo de Garantía, Exclusiones u Otras Notas:</label>
+                        <textarea id="emp-notas" rows="4" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Ej: Garantía de 1 año por defectos de fábrica. No cubre daños por mal uso..."></textarea>
+                    </div>
+
+                    <div class="md:col-span-2 text-right">
+                        <button type="button" onclick="guardarEmpresa()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded shadow transition">
+                            Guardar Configuración
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="tab-presupuesto" class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-bold border-b pb-2 mb-4 text-gray-700">Datos del Cliente</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">NIT / CC:</label>
+                                <input type="text" id="cli-nit" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Nombre Completo:</label>
+                                <input type="text" id="cli-nombre" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Dirección:</label>
+                                <input type="text" id="cli-direccion" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Código Postal:</label>
+                                <input type="text" id="cli-cp" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Ciudad:</label>
+                                <input type="text" id="cli-ciudad" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Teléfono:</label>
+                                <input type="text" id="cli-telefono" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold mb-1">Email:</label>
+                                <input type="email" id="cli-email" class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-bold border-b pb-2 mb-4 text-gray-700">Añadir Artículos al Presupuesto</h2>
+                        <form id="form-articulo" class="flex flex-col md:flex-row gap-4 items-end" onsubmit="agregarArticulo(event)">
+                            <div class="flex-grow">
+                                <label class="block text-sm font-semibold mb-1">Descripción del Artículo:</label>
+                                <input type="text" id="art-nombre" required class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ej. Computador Portátil">
+                            </div>
+                            <div class="w-full md:w-32">
+                                <label class="block text-sm font-semibold mb-1">Precio Unitario ($):</label>
+                                <input type="number" id="art-precio" min="0" step="any" required class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500" placeholder="0.00">
+                            </div>
+                            <div class="w-full md:w-24">
+                                <label class="block text-sm font-semibold mb-1">Cant.:</label>
+                                <input type="number" id="art-cantidad" min="1" value="1" required class="w-full border p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded shadow w-full md:w-auto transition">
+                                Añadir
+                            </button>
+                        </form>
+
+                        <div class="overflow-x-auto mt-6">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
+                                        <th class="py-3 px-2">Descripción</th>
+                                        <th class="py-3 px-2 text-right">Precio Unitario</th>
+                                        <th class="py-3 px-2 text-center">Cant.</th>
+                                        <th class="py-3 px-2 text-right">Total</th>
+                                        <th class="py-3 px-2 text-center">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-articulos" class="divide-y divide-gray-200">
+                                    <tr id="fila-vacia">
+                                        <td colspan="5" class="text-center py-4 text-gray-400 italic">No se han añadido artículos aún.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md sticky top-6">
+                        <h2 class="text-xl font-bold border-b pb-2 mb-4 text-gray-700">Resumen del Presupuesto</h2>
+                        
+                        <div class="space-y-3 text-lg">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Subtotal:</span>
+                                <span id="resumen-subtotal" class="font-semibold">$0.00</span>
+                            </div>
+                            <div class="flex justify-between text-orange-600">
+                                <span>IVA (19%):</span>
+                                <span id="resumen-iva" class="font-semibold">$0.00</span>
+                            </div>
+                            <div class="flex justify-between text-2xl font-bold text-gray-900 border-t pt-3">
+                                <span>Total:</span>
+                                <span id="resumen-total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 space-y-2">
+                            <button onclick="window.print()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center justify-center gap-2">
+                                🖨️ Imprimir / Guardar PDF
+                            </button>
+                            <button onclick="limpiarPresupuesto()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition">
+                                Limpiar Presupuesto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <style>
+        @media print {
+            nav, button, form, #fila-vacia, .text-center.py-4 {
+                display: none !important;
+            }
+            body {
+                background-color: white;
+                color: black;
+            }
+            .bg-white {
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            /* Bloque simulado para imprimir los datos organizados en formato factura */
+            #tab-configuracion {
+                display: block !important;
+                border-bottom: 2px solid #000;
+                margin-bottom: 20px;
+                padding-bottom: 10px !important;
+            }
+            #form-empresa input, #form-empresa textarea {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                pointer-events: none;
+            }
+            #tab-presupuesto {
+                display: block !important;
+            }
+            .grid {
+                display: block !important;
+            }
+            .lg\:col-span-2, .space-y-6 {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        // Variables de estado local
+        let articulos = [];
+        const IVA_PORCENTAJE = 0.19;
+
+        // Al cargar la página
+        window.onload = function() {
+            cargarEmpresa();
+            actualizarTabla();
+        };
+
+        // Cambiar entre pestañas de navegación (Presupuesto / Configuración)
+        function switchTab(tabName) {
+            document.getElementById('tab-presupuesto').classList.add('hidden');
+            document.getElementById('tab-configuracion').classList.add('hidden');
+            
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        }
+
+        // Guardar los datos de la empresa en el LocalStorage
+        function guardarEmpresa() {
+            const datosEmpresa = {
+                nit: document.getElementById('emp-nit').value,
+                nombre: document.getElementById('emp-nombre').value,
+                direccion: document.getElementById('emp-direccion').value,
+                cp: document.getElementById('emp-cp').value,
+                ciudad: document.getElementById('emp-ciudad').value,
+                telefono: document.getElementById('emp-telefono').value,
+                email: document.getElementById('emp-email').value,
+                notas: document.getElementById('emp-notas').value
+            };
+
+            localStorage.setItem('datosEmpresa', JSON.stringify(datosEmpresa));
+            alert('¡Configuración de la empresa guardada con éxito!');
+            switchTab('presupuesto'); // Regresa al presupuesto de forma automática
+        }
+
+        // Cargar los datos guardados de la empresa
+        function cargarEmpresa() {
+            const guardado = localStorage.getItem('datosEmpresa');
+            if (guardado) {
+                const datos = JSON.parse(guardado);
+                document.getElementById('emp-nit').value = datos.nit || '';
+                document.getElementById('emp-nombre').value = datos.nombre || '';
+                document.getElementById('emp-direccion').value = datos.direccion || '';
+                document.getElementById('emp-cp').value = datos.cp || '';
+                document.getElementById('emp-ciudad').value = datos.ciudad || '';
+                document.getElementById('emp-telefono').value = datos.telefono || '';
+                document.getElementById('emp-email').value = datos.email || '';
+                document.getElementById('emp-notas').value = datos.notas || '';
+            }
+        }
+
+        // Agregar artículo a la lista en memoria
+        function agregarArticulo(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('art-nombre').value;
+            const precio = parseFloat(document.getElementById('art-precio').value);
+            const cantidad = parseInt(document.getElementById('art-cantidad').value);
+
+            articulos.push({ nombre, precio, cantidad });
+
+            // Resetear el formulario de artículo
+            document.getElementById('form-articulo').reset();
+            document.getElementById('art-cantidad').value = 1; // Default
+            
+            actualizarTabla();
+        }
+
+        // Eliminar un artículo de la lista
+        function eliminarArticulo(index) {
+            articulos.splice(index, 1);
+            actualizarTabla();
+        }
+
+        // Renderizar la tabla de artículos y calcular totales
+        function actualizarTabla() {
+            const tbody = document.getElementById('lista-articulos');
+            tbody.innerHTML = '';
+
+            if (articulos.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="fila-vacia">
+                        <td colspan="5" class="text-center py-4 text-gray-400 italic">No se han añadido artículos aún.</td>
+                    </tr>`;
+                calcularTotales(0);
+                return;
+            }
+
+            let subtotal = 0;
+
+            articulos.forEach((art, index) => {
+                const totalArticulo = art.precio * art.cantidad;
+                subtotal += totalArticulo;
+
+                const fila = document.createElement('tr');
+                fila.className = "border-b hover:bg-gray-50 text-sm";
+                fila.innerHTML = `
+                    <td class="py-3 px-2 font-medium">${art.nombre}</td>
+                    <td class="py-3 px-2 text-right">$${art.precio.toFixed(2)}</td>
+                    <td class="py-3 px-2 text-center">${art.cantidad}</td>
+                    <td class="py-3 px-2 text-right font-semibold">$${totalArticulo.toFixed(2)}</td>
+                    <td class="py-3 px-2 text-center">
+                        <button onclick="eliminarArticulo(${index})" class="text-red-500 hover:text-red-700 font-bold px-2 py-1">
+                            ✕
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(fila);
+            });
+
+            calcularTotales(subtotal);
+        }
+
+        // Formatear y calcular Subtotal, IVA y Total definitivo
+        function calcularTotales(subtotal) {
+            const iva = subtotal * IVA_PORCENTAJE;
+            const total = subtotal + iva;
+
+            document.getElementById('resumen-subtotal').innerText = `$${subtotal.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
+            document.getElementById('resumen-iva').innerText = `$${iva.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
+            document.getElementById('resumen-total').innerText = `$${total.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
+        }
+
+        // Limpiar todo el estado de presupuesto actual
+        function limpiarPresupuesto() {
+            if (confirm('¿Estás seguro de que deseas limpiar los datos del cliente y los artículos?')) {
+                articulos = [];
+                document.getElementById('cli-nit').value = '';
+                document.getElementById('cli-nombre').value = '';
+                document.getElementById('cli-direccion').value = '';
+                document.getElementById('cli-cp').value = '';
+                document.getElementById('cli-ciudad').value = '';
+                document.getElementById('cli-telefono').value = '';
+                document.getElementById('cli-email').value = '';
+                actualizarTabla();
+            }
+        }
+    </script>
+</body>
+</html>
